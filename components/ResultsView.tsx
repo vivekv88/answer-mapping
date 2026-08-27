@@ -29,6 +29,7 @@ interface ResultsViewProps {
   answers: Answer[];
   mappings: Mapping[];
   answerPdfUrl: string | null;
+  answerIsImage: boolean;
 }
 
 export default function ResultsView({
@@ -36,6 +37,7 @@ export default function ResultsView({
   answers,
   mappings,
   answerPdfUrl,
+  answerIsImage,
 }: ResultsViewProps) {
   const [
     selectedQuestionId,
@@ -77,12 +79,7 @@ export default function ResultsView({
   ) => {
     setSelectedQuestionId(id);
 
-    setExpandedQuestionIds((current) => {
-      const next = new Set(current);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
+    setExpandedQuestionIds((current) => new Set(current).add(id));
 
     setMobileTab("answers");
   };
@@ -146,6 +143,7 @@ export default function ResultsView({
         <div className="min-h-0">
           <AnswerSheetViewer
             pdfUrl={answerPdfUrl}
+            isImage={answerIsImage}
             selectedAnswer={
               selectedAnswer
             }
@@ -176,6 +174,7 @@ export default function ResultsView({
         ) : (
           <AnswerSheetViewer
             pdfUrl={answerPdfUrl}
+            isImage={answerIsImage}
             selectedAnswer={
               selectedAnswer
             }

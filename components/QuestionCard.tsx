@@ -9,6 +9,7 @@ interface QuestionCardProps {
   selected: boolean;
   expanded: boolean;
   onClick: () => void;
+  onToggleExpand: () => void;
 }
 
 export default function QuestionCard({
@@ -17,19 +18,16 @@ export default function QuestionCard({
   selected,
   expanded,
   onClick,
+  onToggleExpand,
 }: QuestionCardProps) {
-  const marks =
-    mapping?.marksObtained ?? 0;
+  const marks = mapping?.marksObtained ?? 0;
 
   const total =
     mapping?.totalMarks ??
     question.marks ??
     0;
 
-  const percentage =
-    total > 0
-      ? marks / total
-      : 0;
+  const percentage = total > 0 ? marks / total : 0;
 
   const scoreClass =
     percentage >= 0.8
@@ -46,9 +44,18 @@ export default function QuestionCard({
           : "border-transparent shadow-[0_2px_8px_rgba(44,40,38,0.04)]"
       }`}
     >
-      <button
+      {/* Question header */}
+      <div
         onClick={onClick}
-        className="w-full p-3 text-left"
+        role="button"
+        tabIndex={0}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            onClick();
+          }
+        }}
+        className="w-full cursor-pointer p-3 text-left"
       >
         <div className="flex items-start gap-3">
           {/* Question number */}
@@ -62,14 +69,14 @@ export default function QuestionCard({
             {question.number}
           </div>
 
-          {/* Question */}
+          {/* Question text */}
           <div className="min-w-0 flex-1">
             <p className="text-[11px] leading-[1.35] text-[#3f3d3c]">
               {question.text}
             </p>
           </div>
 
-          {/* Marks */}
+          {/* Marks + expand button */}
           <div className="flex shrink-0 items-center gap-2">
             <span
               className={`rounded-full px-2 py-1 text-[10px] font-semibold ${scoreClass}`}
@@ -77,27 +84,32 @@ export default function QuestionCard({
               {marks}/{total}
             </span>
 
-            {expanded ? (
-              <ChevronUp className="h-4 w-4 text-gray-400" />
-            ) : (
-              <ChevronDown className="h-4 w-4 text-gray-400" />
-            )}
+            <button
+              type="button"
+              aria-label={expanded ? "Collapse feedback" : "Expand feedback"}
+              onClick={(event) => {
+                event.stopPropagation();
+                onToggleExpand();
+              }}
+              className="rounded p-0.5 text-gray-400 hover:bg-gray-100"
+            >
+              {expanded ? (
+                <ChevronUp className="h-4 w-4" />
+              ) : (
+                <ChevronDown className="h-4 w-4" />
+              )}
+            </button>
           </div>
         </div>
-      </button>
+      </div>
 
+      {/* Feedback */}
       {expanded && (
-        <div className="border-t border-[#eeeae8] px-3 pb-3 pt-2">
-          <div className="rounded-lg bg-[#f5f4f3] p-3">
-            <p className="mb-1 text-[10px] font-semibold text-[#3e3c3a]">
-              AI Feedback
-            </p>
-
-            <p className="text-[10px] leading-4 text-[#666260]">
-              {mapping?.feedback ??
-                "Answer analyzed successfully. The response was matched with this question."}
-            </p>
-          </div>
+        <div className="border-t border-gray-100 px-3 pb-3 pt-2">
+          <p className="text-[10px] leading-4 text-[#666260]">
+            {mapping?.feedback ??
+              "Answer analyzed successfully. The response was matched with this question."}
+          </p>
         </div>
       )}
     </div>

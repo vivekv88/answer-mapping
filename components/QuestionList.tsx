@@ -72,8 +72,8 @@ export default function QuestionList({
               expanded={expanded}
               onClick={() => {
                 onSelect(question.id);
-                onExpand(question.id);
               }}
+              onToggleExpand={() => onExpand(question.id)}
             />
           );
         })}

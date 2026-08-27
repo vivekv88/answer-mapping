@@ -28,11 +28,13 @@ pdfjs.GlobalWorkerOptions.workerSrc =
 
 interface AnswerSheetViewerProps {
   pdfUrl: string | null;
+  isImage: boolean;
   selectedAnswer: Answer | null;
 }
 
 export default function AnswerSheetViewer({
   pdfUrl,
+  isImage,
   selectedAnswer,
 }: AnswerSheetViewerProps) {
   const [numPages, setNumPages] =
@@ -46,6 +48,9 @@ export default function AnswerSheetViewer({
 
   const [pageDimensions, setPageDimensions] =
     useState<Record<number, { width: number; height: number }>>({});
+
+  const [imageDimensions, setImageDimensions] =
+    useState({ width: 1000, height: 1414 });
 
   const pageRefs =
     useRef<Record<number, HTMLDivElement | null>>(
@@ -65,28 +70,45 @@ export default function AnswerSheetViewer({
     const page = selectedAnswer.page;
     setCurrentPage(page);
 
-    const frame = window.requestAnimationFrame(() => {
+    let attempts = 0;
+    let frame = 0;
+
+    const centerSelectedPage = () => {
       const element = pageRefs.current[page];
       const viewer = viewerRef.current;
 
-      if (!element || !viewer) return;
+      if (!element || !viewer) {
+        if (attempts < 8) {
+          attempts += 1;
+          frame = window.requestAnimationFrame(centerSelectedPage);
+        }
+        return;
+      }
 
-      const targetTop = element.offsetTop - (viewer.clientHeight - element.offsetHeight) / 2;
+      const elementRect = element.getBoundingClientRect();
+      const viewerRect = viewer.getBoundingClientRect();
+      const targetTop = viewer.scrollTop + elementRect.top - viewerRect.top - (viewer.clientHeight - elementRect.height) / 2;
       viewer.scrollTo({
         top: Math.max(0, targetTop),
         behavior: "smooth",
       });
-    });
+    };
+
+    frame = window.requestAnimationFrame(centerSelectedPage);
 
     return () => window.cancelAnimationFrame(frame);
   }, [selectedAnswer?.id, selectedAnswer?.page, numPages]);
 
   const scrollToPage = (page: number) => {
     setCurrentPage(page);
-    pageRefs.current[page]?.scrollIntoView({
-      behavior: "smooth",
-      block: "center",
-    });
+    const element = pageRefs.current[page];
+    const viewer = viewerRef.current;
+    if (!element || !viewer) return;
+
+    const elementRect = element.getBoundingClientRect();
+    const viewerRect = viewer.getBoundingClientRect();
+    const targetTop = viewer.scrollTop + elementRect.top - viewerRect.top - (viewer.clientHeight - elementRect.height) / 2;
+    viewer.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
   };
 
   if (!pdfUrl) {
@@ -99,6 +121,21 @@ export default function AnswerSheetViewer({
 
   const pageWidth =
     700 * zoom;
+
+  if (isImage) {
+    const imageHeight = pageWidth * imageDimensions.height / imageDimensions.width;
+    return (
+      <div className="flex h-full min-h-0 flex-col rounded-xl bg-[#e3e1e0]">
+        <PdfToolbar page={1} totalPages={1} zoom={zoom} onPrevious={() => undefined} onNext={() => undefined} onZoomIn={() => setZoom((value) => Math.min(1.5, value + 0.1))} onZoomOut={() => setZoom((value) => Math.max(0.6, value - 0.1))} />
+        <div ref={viewerRef} className="min-h-0 flex-1 overflow-auto p-3 sm:p-5">
+          <div className="relative mx-auto w-fit bg-white shadow-xl">
+            <img src={pdfUrl} alt="Uploaded answer sheet" className="block max-w-none" style={{ width: pageWidth }} onLoad={(event) => setImageDimensions({ width: event.currentTarget.naturalWidth, height: event.currentTarget.naturalHeight })} />
+            {selectedAnswer?.page === 1 && <HighlightOverlay item={selectedAnswer} renderedWidth={pageWidth} renderedHeight={imageHeight} />}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-full min-h-0 flex-col rounded-xl bg-[#e3e1e0]">

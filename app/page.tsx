@@ -30,6 +30,9 @@ export default function Home() {
   const [answerPdfUrl, setAnswerPdfUrl] =
     useState<string | null>(null);
 
+  const [answerIsImage, setAnswerIsImage] =
+    useState(false);
+
   const [state, setState] =
     useState<AppState>("upload");
 
@@ -66,6 +69,7 @@ export default function Home() {
 
       setQuestionPdfUrl(newQuestionPdfUrl);
       setAnswerPdfUrl(newAnswerPdfUrl);
+      setAnswerIsImage(answerFile.type.startsWith("image/"));
 
       const formData = new FormData();
 
@@ -166,6 +170,7 @@ export default function Home() {
 
     setQuestionPdfUrl(null);
     setAnswerPdfUrl(null);
+    setAnswerIsImage(false);
 
     setQuestions([]);
     setAnswers([]);
@@ -199,6 +204,7 @@ export default function Home() {
         answers={answers}
         mappings={mappings}
         answerPdfUrl={answerPdfUrl}
+        answerIsImage={answerIsImage}
       />
     );
   }

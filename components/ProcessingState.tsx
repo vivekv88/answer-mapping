@@ -34,7 +34,16 @@ export default function ProcessingStatus({
                     : "bg-gray-100 text-gray-400"
                 }`}
               >
-                {completed ? "✓" : index + 1}
+                {completed ? (
+                  "✓"
+                ) : active ? (
+                  <span
+                    aria-label="Processing"
+                    className="h-4 w-4 animate-spin rounded-full border-2 border-[#ffb39e] border-t-[#ff5a32]"
+                  />
+                ) : (
+                  index + 1
+                )}
               </div>
 
               <span
