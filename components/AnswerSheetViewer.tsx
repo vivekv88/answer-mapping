@@ -52,30 +52,34 @@ export default function AnswerSheetViewer({
       {}
     );
 
+  const viewerRef =
+    useRef<HTMLDivElement | null>(null);
+
   /*
    * Whenever selected answer changes,
    * jump to its page.
    */
   useEffect(() => {
-    if (!selectedAnswer) {
-      return;
-    }
+    if (!selectedAnswer || numPages === 0) return;
 
-    const page =
-      selectedAnswer.page;
-
+    const page = selectedAnswer.page;
     setCurrentPage(page);
 
-    const element =
-      pageRefs.current[page];
+    const frame = window.requestAnimationFrame(() => {
+      const element = pageRefs.current[page];
+      const viewer = viewerRef.current;
 
-    if (element) {
-      element.scrollIntoView({
+      if (!element || !viewer) return;
+
+      const targetTop = element.offsetTop - (viewer.clientHeight - element.offsetHeight) / 2;
+      viewer.scrollTo({
+        top: Math.max(0, targetTop),
         behavior: "smooth",
-        block: "center",
       });
-    }
-  }, [selectedAnswer?.id]);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [selectedAnswer?.id, selectedAnswer?.page, numPages]);
 
   const scrollToPage = (page: number) => {
     setCurrentPage(page);
@@ -128,7 +132,10 @@ export default function AnswerSheetViewer({
         }
       />
 
-      <div className="min-h-0 flex-1 overflow-auto p-3 sm:p-5">
+      <div
+        ref={viewerRef}
+        className="min-h-0 flex-1 overflow-auto p-3 sm:p-5"
+      >
         <Document
           file={pdfUrl}
           onLoadSuccess={({ numPages }) =>

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Answer, Mapping, Question } from "@/types/document";
+import { gradeAnswers } from "@/lib/ai";
 
 export async function POST(request: Request) {
   try {
@@ -15,25 +16,32 @@ export async function POST(request: Request) {
       );
     }
 
+    const matchedInputs = questions.flatMap((question) => {
+      const answer = findAnswer(question, answers);
+      return answer ? [{ question, answer }] : [];
+    });
+    const grading = await gradeAnswers(matchedInputs);
+
     return NextResponse.json({
       success: true,
       mappings: questions.map((question): Mapping => {
         const answer = findAnswer(question, answers);
         const totalMarks = question.marks ?? 0;
+        const grade = grading.get(question.id);
         return {
-        questionId: question.id,
-        answerId: answer?.id ?? null,
-        confidence: answer ? 1 : 0,
-        reason: answer
-          ? answer.questionNumber === question.number
-            ? "Matched using the explicit question number."
-            : "Matched using answer text similarity."
-          : "No matching answer found.",
-        marksObtained: 0,
-        totalMarks,
-        feedback: answer
-          ? "Answer matched. Review the response for completeness and supporting detail."
-          : "No answer was found for this question.",
+          questionId: question.id,
+          answerId: answer?.id ?? null,
+          confidence: grade?.confidence ?? (answer ? 1 : 0),
+          reason: answer
+            ? answer.questionNumber === question.number
+              ? "Matched using the explicit question number."
+              : "Matched using answer text similarity."
+            : "No matching answer found.",
+          marksObtained: grade?.marksObtained ?? 0,
+          totalMarks: grade?.totalMarks ?? totalMarks,
+          feedback: grade?.feedback ?? (answer
+            ? "Answer matched, but grading was unavailable. Please review this response manually."
+            : "No answer was found for this question."),
         };
       }),
     });

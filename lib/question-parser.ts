@@ -33,12 +33,15 @@ export function extractQuestions(textBlocks: TextBlock[]): Question[] {
       continue;
     }
 
+    const marks = extractMarks(questionText);
+
     questions.push({
       id: `q-${number}`,
       number,
       text: questionText,
       page: block.page,
       boundingBox,
+      marks,
     });
   }
 
@@ -55,4 +58,10 @@ function unionBoxes(first: BoundingBox, second: BoundingBox): BoundingBox {
     height: Math.max(first.y + first.height, second.y + second.height) - y,
     coordinateSpace: "normalized-1000",
   };
+}
+
+function extractMarks(text: string): number | undefined {
+  const match = text.match(/(?:\[\s*|\(\s*|\b)(\d+(?:\.\d+)?)\s*(?:marks?|pts?)(?:\s*\]|\s*\))?/i)
+    ?? text.match(/max(?:imum)?\s*marks?\s*[:=-]?\s*(\d+(?:\.\d+)?)/i);
+  return match ? Number(match[1]) : undefined;
 }
