@@ -213,7 +213,7 @@ export default function Home() {
     <AppShell>
       <div className="mx-auto flex min-h-full w-full max-w-257.5 flex-col items-center px-4 py-10 sm:px-8 lg:py-16">
         <div className="text-center">
-          <h1 className="text-[30px] font-extrabold tracking-[-1.3px] text-[#2f3030] sm:text-[38px]">Upload <span className="rounded-md bg-[#ffe6dd] px-1.5 text-[#ff572f]">Question Paper &amp; Answer Sheets</span></h1>
+          <h1 className="text-[30px] font-extrabold tracking-[-1.3px] text-[#2f3030] sm:text-[38px]">Upload <span className="rounded-md px-1.5 text-[#ff572f]">Question Paper &amp; Answer Sheets</span></h1>
           <p className="mt-2 text-sm text-[#454342] sm:text-base">Upload both files to get started</p>
           <div className="mx-auto mt-6 grid h-24 w-24 place-items-center rounded-full bg-[#ffe1d8] text-[#ff613b] sm:mt-7 sm:h-28 sm:w-28"><div className="grid h-16 w-16 place-items-center rounded-full border-[7px] border-[#ffb29c] bg-white text-3xl sm:h-20 sm:w-20">✦</div></div>
         </div>
