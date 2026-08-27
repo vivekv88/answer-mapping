@@ -10,6 +10,7 @@ import {
 } from "@/types/document";
 
 import QuestionList from "./QuestionList";
+import AppShell from "./AppShell";
 
 const AnswerSheetViewer = dynamic(
   () => import("./AnswerSheetViewer"),
@@ -87,17 +88,18 @@ export default function ResultsView({
   };
 
   return (
-    <div className="flex h-full min-h-0 flex-col overflow-hidden bg-gray-100">
+    <AppShell>
+    <div className="flex min-h-full flex-col overflow-hidden bg-[#f1f0ef]">
       {/* Mobile tabs */}
-      <div className="flex border-b bg-white md:hidden">
+      <div className="flex gap-1 border-b bg-white p-2 md:hidden">
         <button
           onClick={() =>
             setMobileTab("questions")
           }
-          className={`flex-1 py-3 text-sm font-semibold ${
+          className={`flex-1 rounded-full py-2 text-xs font-semibold transition ${
             mobileTab === "questions"
-              ? "border-b-2 border-orange-500 text-gray-900"
-              : "text-gray-400"
+              ? "bg-[#303131] text-white"
+              : "text-[#8c8987]"
           }`}
         >
           Questions
@@ -107,10 +109,10 @@ export default function ResultsView({
           onClick={() =>
             setMobileTab("answers")
           }
-          className={`flex-1 py-3 text-sm font-semibold ${
+          className={`flex-1 rounded-full py-2 text-xs font-semibold transition ${
             mobileTab === "answers"
-              ? "border-b-2 border-orange-500 text-gray-900"
-              : "text-gray-400"
+              ? "bg-[#303131] text-white"
+              : "text-[#8c8987]"
           }`}
         >
           Answer Sheet
@@ -118,9 +120,9 @@ export default function ResultsView({
       </div>
 
       {/* Desktop */}
-      <div className="hidden min-h-0 flex-1 grid-cols-[minmax(380px,0.95fr)_minmax(500px,1.2fr)] md:grid">
+      <div className="hidden min-h-0 flex-1 grid-cols-[minmax(360px,0.95fr)_minmax(480px,1.2fr)] gap-2 p-2 md:grid lg:p-3">
         {/* Questions */}
-        <div className="min-h-0 border-r">
+        <div className="min-h-0 overflow-hidden rounded-xl bg-[#f7f6f5]">
           <QuestionList
             questions={questions}
             mappings={mappings}
@@ -181,5 +183,6 @@ export default function ResultsView({
         )}
       </div>
     </div>
+    </AppShell>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { ChangeEvent } from "react";
+import { FileUp, X } from "lucide-react";
 
 interface UploadZoneProps {
   title: string;
@@ -20,19 +21,9 @@ export default function UploadZone({
   };
 
   return (
-    <div className="rounded-xl border-2 border-dashed border-gray-300 bg-white p-8 text-center transition hover:border-blue-500">
-      <div className="mb-4 text-4xl">📄</div>
-
-      <h2 className="mb-2 text-lg font-semibold text-gray-900">
-        {title}
-      </h2>
-
-      <p className="mb-5 text-sm text-gray-500">
-        Upload a PDF document
-      </p>
-
-      <label className="inline-block cursor-pointer rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700">
-        Choose File
+    <div className="relative flex min-h-[150px] items-center justify-center rounded-[16px] border border-dashed border-[#d0cecc] bg-white p-5 text-center transition hover:border-[#ff6841] sm:min-h-[155px]">
+      <label className="flex w-full cursor-pointer flex-col items-center justify-center gap-2">
+        {file ? <div className="relative flex max-w-full items-center gap-3 rounded-lg bg-[#f5f5f4] px-3 py-2 text-left"><span className="grid h-8 w-8 shrink-0 place-items-center rounded bg-[#ef5550] text-[9px] font-bold text-white">PDF</span><span className="min-w-0"><span className="block max-w-[180px] truncate text-xs font-semibold text-[#363534]">{file.name}</span><span className="mt-1 block text-[10px] text-[#999694]">{(file.size / 1024 / 1024).toFixed(1)}MB &nbsp;•&nbsp; PDF</span></span><button type="button" onClick={(event) => { event.preventDefault(); onFileChange(null); }} className="absolute -right-2 -top-2 grid h-5 w-5 place-items-center rounded-full bg-[#555453] text-white"><X className="h-3 w-3" /></button></div> : <><span className="grid h-10 w-10 place-items-center rounded-lg bg-[#f2f2f1] text-[#3f3e3d]"><FileUp className="h-5 w-5" /></span><span className="text-sm font-semibold text-[#3a3938]">Upload <span className="text-[#ff5a32]">{title}</span></span><span className="text-[10px] text-[#aaa7a5]">Max 10MB</span></>}
 
         <input
           type="file"
@@ -41,16 +32,6 @@ export default function UploadZone({
           onChange={handleChange}
         />
       </label>
-
-      {file && (
-        <div className="mt-5 rounded-lg bg-gray-50 p-3 text-sm text-gray-700">
-          <p className="font-medium">{file.name}</p>
-
-          <p className="mt-1 text-xs text-gray-500">
-            {(file.size / 1024 / 1024).toFixed(2)} MB
-          </p>
-        </div>
-      )}
     </div>
   );
 }

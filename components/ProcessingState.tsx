@@ -14,12 +14,8 @@ export default function ProcessingStatus({
   currentStep,
 }: ProcessingStatusProps) {
   return (
-    <div className="mx-auto mt-8 max-w-xl rounded-xl border bg-white p-6 shadow-sm">
-      <h2 className="mb-6 text-lg font-semibold">
-        Processing documents
-      </h2>
-
-      <div className="space-y-4">
+    <div className="mx-auto mt-8 max-w-xl text-left">
+      <div className="space-y-2">
         {steps.map((step, index) => {
           const completed = index < currentStep;
           const active = index === currentStep;
@@ -30,7 +26,7 @@ export default function ProcessingStatus({
               className="flex items-center gap-3"
             >
               <div
-                className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold ${
+                className={`flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-semibold ${
                   completed
                     ? "bg-green-100 text-green-700"
                     : active
@@ -44,8 +40,8 @@ export default function ProcessingStatus({
               <span
                 className={
                   active
-                    ? "font-medium text-gray-900"
-                    : "text-gray-500"
+                    ? "font-medium text-[#ff5a32]"
+                    : "text-[#85817f]"
                 }
               >
                 {step}

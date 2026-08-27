@@ -40,23 +40,23 @@ export default function QuestionCard({
 
   return (
     <div
-      className={`rounded-xl border bg-white transition-all ${
+      className={`rounded-[10px] border bg-white transition-all ${
         selected
-          ? "border-orange-400 shadow-sm"
-          : "border-gray-200"
+          ? "border-[#ff693f] shadow-[0_3px_10px_rgba(255,105,63,0.12)]"
+          : "border-transparent shadow-[0_2px_8px_rgba(44,40,38,0.04)]"
       }`}
     >
       <button
         onClick={onClick}
-        className="w-full p-4 text-left"
+        className="w-full p-3 text-left"
       >
         <div className="flex items-start gap-3">
           {/* Question number */}
           <div
-            className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-semibold ${
+            className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
               selected
-                ? "bg-orange-500 text-white"
-                : "bg-gray-700 text-white"
+                ? "bg-[#ff5a32] text-white"
+                : "bg-[#5d5b59] text-white"
             }`}
           >
             {question.number}
@@ -64,7 +64,7 @@ export default function QuestionCard({
 
           {/* Question */}
           <div className="min-w-0 flex-1">
-            <p className="text-sm leading-5 text-gray-800">
+            <p className="text-[11px] leading-[1.35] text-[#3f3d3c]">
               {question.text}
             </p>
           </div>
@@ -72,7 +72,7 @@ export default function QuestionCard({
           {/* Marks */}
           <div className="flex shrink-0 items-center gap-2">
             <span
-              className={`rounded-full px-2 py-1 text-xs font-semibold ${scoreClass}`}
+              className={`rounded-full px-2 py-1 text-[10px] font-semibold ${scoreClass}`}
             >
               {marks}/{total}
             </span>
@@ -87,13 +87,13 @@ export default function QuestionCard({
       </button>
 
       {expanded && (
-        <div className="border-t px-4 pb-4 pt-3">
-          <div className="rounded-lg bg-orange-50 p-3">
-            <p className="mb-1 text-xs font-semibold text-orange-700">
+        <div className="border-t border-[#eeeae8] px-3 pb-3 pt-2">
+          <div className="rounded-lg bg-[#f5f4f3] p-3">
+            <p className="mb-1 text-[10px] font-semibold text-[#3e3c3a]">
               AI Feedback
             </p>
 
-            <p className="text-xs leading-5 text-gray-700">
+            <p className="text-[10px] leading-4 text-[#666260]">
               {mapping?.feedback ??
                 "Answer analyzed successfully. The response was matched with this question."}
             </p>

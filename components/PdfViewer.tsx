@@ -156,8 +156,10 @@ export default function PdfViewer({
                 pageNumber;
 
               return (
-                <div
-                  key={pageNumber}
+                      renderedWidth={
+                        pageWidth
+                      }
+                      renderedHeight={pageWidth * 1.414}
                   ref={
                     isSelectedPage
                       ? selectedPageRef

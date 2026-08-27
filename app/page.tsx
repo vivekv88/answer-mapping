@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { ChevronLeft, Sparkles } from "lucide-react";
 
 import UploadZone from "@/components/UploadZone";
 import ProcessingStatus from "@/components/ProcessingState";
 import ResultsView from "@/components/ResultsView";
+import AppShell from "@/components/AppShell";
 
 import {
   AnalysisResult,
@@ -175,23 +177,18 @@ export default function Home() {
 
   if (state === "processing") {
     return (
-      <main className="min-h-screen bg-gray-50 px-6 py-12">
-        <div className="mx-auto max-w-4xl">
-          <div className="mb-10 text-center">
-            <h1 className="text-3xl font-bold text-gray-900">
-              AI Answer Mapper
-            </h1>
-
-            <p className="mt-2 text-gray-500">
-              Analyzing your documents...
-            </p>
+      <AppShell>
+        <div className="flex min-h-full items-center justify-center px-5 py-10">
+          <div className="w-full max-w-3xl rounded-[22px] bg-white px-6 py-16 text-center shadow-[0_10px_35px_rgba(44,40,38,0.06)] sm:px-16">
+            <div className="mx-auto mb-6 grid h-20 w-20 place-items-center rounded-full bg-[#ffe0d6] text-[#ff5a2f]">
+              <Sparkles className="h-11 w-11" strokeWidth={1.7} />
+            </div>
+            <h1 className="text-2xl font-extrabold tracking-tight text-[#2f3030] sm:text-3xl">Extracting...</h1>
+            <p className="mt-2 text-sm text-[#8c8987]">This may take a while</p>
+            <div className="mx-auto mt-10 max-w-md"><ProcessingStatus currentStep={processingStep} /></div>
           </div>
-
-          <ProcessingStatus
-            currentStep={processingStep}
-          />
         </div>
-      </main>
+      </AppShell>
     );
   }
 
@@ -207,89 +204,20 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 px-6 py-12">
-      <div className="mx-auto max-w-6xl">
-        <div className="mb-12 text-center">
-          <div className="mb-4 inline-flex rounded-full bg-blue-100 px-4 py-2 text-sm font-medium text-blue-700">
-            AI-Powered Document Analysis
-          </div>
-
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-            AI Answer Mapper
-          </h1>
-
-          <p className="mx-auto mt-4 max-w-2xl text-gray-500">
-            Upload a question paper and a student answer
-            sheet. Our system extracts the content and maps
-            each question to its corresponding answer.
-          </p>
+    <AppShell>
+      <div className="mx-auto flex min-h-full w-full max-w-257.5 flex-col items-center px-4 py-10 sm:px-8 lg:py-16">
+        <div className="text-center">
+          <h1 className="text-[30px] font-extrabold tracking-[-1.3px] text-[#2f3030] sm:text-[38px]">Upload <span className="rounded-md bg-[#ffe6dd] px-1.5 text-[#ff572f]">Question Paper &amp; Answer Sheets</span></h1>
+          <p className="mt-2 text-sm text-[#454342] sm:text-base">Upload both files to get started</p>
+          <div className="mx-auto mt-6 grid h-24 w-24 place-items-center rounded-full bg-[#ffe1d8] text-[#ff613b] sm:mt-7 sm:h-28 sm:w-28"><div className="grid h-16 w-16 place-items-center rounded-full border-[7px] border-[#ffb29c] bg-white text-3xl sm:h-20 sm:w-20">✦</div></div>
         </div>
-
-        <div className="grid gap-6 md:grid-cols-2">
-          <UploadZone
-            title="Question Paper"
-            file={questionFile}
-            onFileChange={setQuestionFile}
-          />
-
-          <UploadZone
-            title="Student Answer Sheet"
-            file={answerFile}
-            onFileChange={setAnswerFile}
-          />
+        <div className="mt-7 grid w-full max-w-165 gap-3 rounded-[22px] bg-white p-3 shadow-[0_8px_30px_rgba(44,40,38,0.07)] sm:grid-cols-2 sm:gap-3 sm:p-3.5">
+          <UploadZone title="Question Paper" file={questionFile} onFileChange={setQuestionFile} />
+          <UploadZone title="Answer Sheet" file={answerFile} onFileChange={setAnswerFile} />
         </div>
-
-        <div className="mt-8 text-center">
-          <button
-            onClick={analyzeDocuments}
-            disabled={!questionFile || !answerFile}
-            className="rounded-xl bg-blue-600 px-8 py-3 font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            Analyze Documents →
-          </button>
-        </div>
-
-        <div className="mt-16 grid gap-6 md:grid-cols-3">
-          <div className="rounded-xl border bg-white p-6">
-            <div className="mb-3 text-2xl">📄</div>
-
-            <h3 className="font-semibold">
-              Extract Questions
-            </h3>
-
-            <p className="mt-2 text-sm text-gray-500">
-              Automatically detect and extract questions
-              from the uploaded paper.
-            </p>
-          </div>
-
-          <div className="rounded-xl border bg-white p-6">
-            <div className="mb-3 text-2xl">🤖</div>
-
-            <h3 className="font-semibold">
-              Map Answers
-            </h3>
-
-            <p className="mt-2 text-sm text-gray-500">
-              Identify which student answer belongs to
-              each question.
-            </p>
-          </div>
-
-          <div className="rounded-xl border bg-white p-6">
-            <div className="mb-3 text-2xl">🔎</div>
-
-            <h3 className="font-semibold">
-              Visual Mapping
-            </h3>
-
-            <p className="mt-2 text-sm text-gray-500">
-              View questions and their corresponding
-              answers side by side.
-            </p>
-          </div>
-        </div>
+        <button onClick={analyzeDocuments} disabled={!questionFile || !answerFile} className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#303131] px-6 py-3 text-xs font-semibold text-white shadow-[0_3px_0_#ff6841] transition hover:bg-[#ff5a32] disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none">Start Mapping <ChevronLeft className="h-4 w-4 rotate-180" /></button>
+        <p className="mt-4 text-xs text-[#85817f]">Once both files are uploaded, you&apos;ll be able to map answers with questions</p>
       </div>
-    </main>
+    </AppShell>
   );
 }

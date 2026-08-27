@@ -97,7 +97,7 @@ export default function AnswerSheetViewer({
     700 * zoom;
 
   return (
-    <div className="flex h-full min-h-0 flex-col bg-gray-200">
+    <div className="flex h-full min-h-0 flex-col rounded-xl bg-[#e3e1e0]">
       <PdfToolbar
         page={currentPage}
         totalPages={numPages}
@@ -128,7 +128,7 @@ export default function AnswerSheetViewer({
         }
       />
 
-      <div className="min-h-0 flex-1 overflow-auto p-5">
+      <div className="min-h-0 flex-1 overflow-auto p-3 sm:p-5">
         <Document
           file={pdfUrl}
           onLoadSuccess={({ numPages }) =>
