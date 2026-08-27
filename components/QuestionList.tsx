@@ -44,7 +44,7 @@ export default function QuestionList({
               const isExpanded = expandedQuestionIds.has(question.id);
               if (allExpanded ? isExpanded : !isExpanded) onExpand(question.id);
             })}
-            className="rounded-full bg-white px-3 py-1.5 text-[10px] font-medium text-[#555250] shadow-sm"
+            className="rounded-full cursor-pointer bg-white px-3 py-1.5 text-[10px] font-medium text-[#555250] shadow-sm"
           >
             {allExpanded ? "Collapse All" : "Expand All"}
           </button>

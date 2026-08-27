@@ -221,7 +221,7 @@ export default function Home() {
           <UploadZone title="Question Paper" file={questionFile} onFileChange={setQuestionFile} />
           <UploadZone title="Answer Sheet" file={answerFile} onFileChange={setAnswerFile} />
         </div>
-        <button onClick={analyzeDocuments} disabled={!questionFile || !answerFile} className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#303131] px-6 py-3 text-xs font-semibold text-white shadow-[0_3px_0_#ff6841] transition hover:bg-[#ff5a32] disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none">Start Mapping <ChevronLeft className="h-4 w-4 rotate-180" /></button>
+        <button onClick={analyzeDocuments} disabled={!questionFile || !answerFile} className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#303131] px-6 py-3 text-xs font-semibold text-white shadow-[0_3px_0_#ff6841] transition hover:bg-[#ff5a32] cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none">Start Mapping <ChevronLeft className="h-4 w-4 rotate-180" /></button>
         <p className="mt-4 text-xs text-[#85817f]">Once both files are uploaded, you&apos;ll be able to map answers with questions</p>
       </div>
     </AppShell>
